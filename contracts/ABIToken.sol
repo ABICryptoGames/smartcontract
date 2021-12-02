@@ -16,13 +16,7 @@ contract ABIToken is Ownable, ERC20 {
     address public devwallet; // keep token use for game play
     address public partnerwallet; // keep token will distribute for partner
     address public miningwallet; // keep token use for staking, framing
-    address public eventwallet; // keep token for event game
-
-    uint256 public constant MINT_INTERVAL = 365 days; // time interval from each mint
-    uint256 public immutable MINT_START; // time start when mint action is allowed
-
-    uint256 public lastMint; // time of the lastest mint
-    uint256 public constant MINT_AMOUNT = 50 * 10**24; // 50,000,000
+    address public marketingwallet; // keep token for event game
 
     /**
      * @dev Sets the values for {name} and {symbol}.
@@ -30,9 +24,9 @@ contract ABIToken is Ownable, ERC20 {
      * The default value of {decimals} is 18. To select a different value for
      * {decimals} you should overload it.
      * 
-     * name = "ABI Token", symbol = "ABIT"
+     * name = "ABI", symbol = "ABI"
      */
-    constructor() ERC20("ABI Token", "ABIT") {
+    constructor() ERC20("ABI", "ABI") {
         // set init wallet to deploy address
         // todo: change to real address
 
@@ -48,10 +42,8 @@ contract ABIToken is Ownable, ERC20 {
         miningwallet = msg.sender;
         ERC20._mint(miningwallet, 200 * 10**24); // 200,000,000
 
-        eventwallet = msg.sender;
-        ERC20._mint(eventwallet, 100 * 10*24); // 100,000,000
-
-        MINT_START = block.timestamp.add(5 * 365 days); // 5 years after deployed
+        marketingwallet = msg.sender;
+        ERC20._mint(marketingwallet, 100 * 10*24); // 100,000,000
     }
 
     /**
@@ -99,13 +91,13 @@ contract ABIToken is Ownable, ERC20 {
     }
 
     /**
-     * @dev Set eventwallet
+     * @dev Set marketingwallet
      * require owner
      */
-    function setEventwallet(address addr) external onlyOwner {
-        if (eventwallet != address(0) && balanceOf(eventwallet) > 0) {
-            ERC20._transfer(eventwallet, addr, balanceOf(eventwallet));
+    function setMarketingwallet(address addr) external onlyOwner {
+        if (marketingwallet != address(0) && balanceOf(marketingwallet) > 0) {
+            ERC20._transfer(marketingwallet, addr, balanceOf(marketingwallet));
         }
-        eventwallet = addr;
+        marketingwallet = addr;
     }
 }

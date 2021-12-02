@@ -17,8 +17,9 @@ contract GARToken is Ownable, ERC20 {
      * The default value of {decimals} is 18. To select a different value for
      * {decimals} you should overload it.
      * 
+     * name = "Galaxy Attack Revolution", symbol = "GAR"
      */
-    constructor() ERC20("GAR Token", "GART") {
+    constructor() ERC20("Galaxy Attack Revolution", "GAR") {
     }
 
     /**
