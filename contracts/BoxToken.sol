@@ -36,15 +36,15 @@ contract BoxToken is Ownable, ERC1155Supply {
         return "BXT";
     }
 
-    function setOperator(address addr) public onlyOwner {
+    function setOperator(address addr) external onlyOwner {
         _operator = addr;
     }
 
-    function setBaseURI(string memory uri) public onlyOwner {
+    function setBaseURI(string memory uri) external onlyOwner {
         _baseURI = uri;
     }
 
-    function tokenURI(uint256 tokenId) public view returns (string memory) {
+    function tokenURI(uint256 tokenId) external view returns (string memory) {
         return string(abi.encodePacked(_baseURI, tokenId.toString()));
     }
 
@@ -56,7 +56,7 @@ contract BoxToken is Ownable, ERC1155Supply {
         address account,
         uint256 tokenId,
         uint256 amount
-    ) public onlyOperator {
+    ) external onlyOperator {
         _mint(account, tokenId, amount, "");
     }
 
@@ -68,7 +68,7 @@ contract BoxToken is Ownable, ERC1155Supply {
         address account,
         uint256[] memory tokenIds,
         uint256[] memory amounts
-    ) public onlyOperator {
+    ) external onlyOperator {
         _mintBatch(account, tokenIds, amounts, "");
     }
 
@@ -80,7 +80,7 @@ contract BoxToken is Ownable, ERC1155Supply {
         address account,
         uint256 tokenId,
         uint256 amount
-    ) public onlyOperator {
+    ) external onlyOperator {
         _burn(account, tokenId, amount);
     }
 
@@ -92,7 +92,7 @@ contract BoxToken is Ownable, ERC1155Supply {
         address account,
         uint256[] memory tokenIds,
         uint256[] memory amounts
-    ) public onlyOperator {
+    ) external onlyOperator {
         _burnBatch(account, tokenIds, amounts);
     }
 }

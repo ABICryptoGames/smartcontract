@@ -7,30 +7,31 @@ import "./token/ERC721/extensions/ERC721Enumerable.sol";
 import "./utils/Strings.sol";
 
 
-contract ShipNFT is Ownable, ERC721Enumerable {
+contract ShipToken is Ownable, ERC721Enumerable {
     using Strings for uint256;
 
     string public _baseTokenURI; // base url for gen token uri
-    address private _operator; // operator for controlling game logic
+    address public _operator; // operator for controlling game logic
 
-    constructor() ERC721("ShipNFT", "GARS") {
+    constructor() ERC721("ShipToken", "GARS") {
         // init base uri
         // todo: change to product url
         _baseTokenURI = "";
 
+        // todo: change to product operator
         _operator = msg.sender;
     }
 
     modifier onlyOperator {
-        require(msg.sender == _operator, "ShipNFT: Caller is not operator");
+        require(msg.sender == _operator, "ShipToken: Caller is not operator");
         _;
     }
 
-    function setOperator(address addr) public onlyOwner {
+    function setOperator(address addr) external onlyOwner {
         _operator = addr;
     }
 
-    function setBaseURI(string memory uri) public onlyOwner {
+    function setBaseURI(string memory uri) external onlyOwner {
         _baseTokenURI = uri;
     }
 
@@ -38,22 +39,35 @@ contract ShipNFT is Ownable, ERC721Enumerable {
         return _baseTokenURI;
     }
 
-    function mint(address to, uint256 _tokenId) public onlyOperator {
+    /**
+     * @dev mint `tokenId` to address
+     * require operator
+     */
+    function mint(address to, uint256 _tokenId) external onlyOperator {
         _mint(to, _tokenId);
     }
 
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+    /**
+     * @dev get uri of `tokenId`
+     */
+    function tokenURI(uint256 tokenId) external view override returns (string memory) {
         require(ERC721._exists(tokenId), "URI query for nonexistent token");
 
         string memory baseURI = _baseURI();
         return string(abi.encodePacked(baseURI, tokenId.toString()));
     }
 
-    function allTokenOf() public view returns (uint256[] memory) {
+    /**
+     * @dev get allTokenOf sender
+     */
+    function allTokenOf() external view returns (uint256[] memory) {
         return allTokenOf(msg.sender);
     }
 
-    function allTokenOf(address addr) public view returns (uint256[] memory) {
+    /**
+     * @dev get list token owned by address
+     */
+    function allTokenOf(address addr) external view returns (uint256[] memory) {
         uint256 numOfTokens = balanceOf(addr);
         uint256[] memory tokens = new uint256[](numOfTokens);
 

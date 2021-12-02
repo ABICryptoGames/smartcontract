@@ -12,11 +12,11 @@ contract ABIToken is Ownable, ERC20 {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    address public mainwallet; // keep not distribute token
-    address public devwallet; // keep token use for game play
-    address public partnerwallet; // keep token will distribute for partner
-    address public miningwallet; // keep token use for staking, framing
-    address public marketingwallet; // keep token for event game
+    address public mainPool; // keep not distribute token
+    address public devPool; // keep token use for game play
+    address public partnerPool; // keep token will distribute for partner
+    address public miningPool; // keep token use for staking, framing
+    address public marketingPool; // keep token for maketing and comunity
 
     /**
      * @dev Sets the values for {name} and {symbol}.
@@ -27,77 +27,77 @@ contract ABIToken is Ownable, ERC20 {
      * name = "ABI", symbol = "ABI"
      */
     constructor() ERC20("ABI", "ABI") {
-        // set init wallet to deploy address
-        // todo: change to real address
+        // set init pool to deploy address
+        // todo: change to product address
 
-        mainwallet = msg.sender;
-        ERC20._mint(mainwallet, 270 * 10**24); // 270,000,000
+        mainPool = msg.sender;
+        ERC20._mint(mainPool, 270 * 10**24); // 270,000,000 - 27%
 
-        devwallet = msg.sender;
-        ERC20._mint(devwallet, 210 * 10**24); // 210,000,000
+        devPool = msg.sender;
+        ERC20._mint(devPool, 210 * 10**24); // 210,000,000 - 21%
 
-        partnerwallet = msg.sender;
-        ERC20._mint(partnerwallet, 220 * 10**24); // 220,000,000
+        partnerPool = msg.sender;
+        ERC20._mint(partnerPool, 220 * 10**24); // 220,000,000 - 22%
 
-        miningwallet = msg.sender;
-        ERC20._mint(miningwallet, 200 * 10**24); // 200,000,000
+        miningPool = msg.sender;
+        ERC20._mint(miningPool, 200 * 10**24); // 200,000,000 - 20%
 
-        marketingwallet = msg.sender;
-        ERC20._mint(marketingwallet, 100 * 10*24); // 100,000,000
+        marketingPool = msg.sender;
+        ERC20._mint(marketingPool, 100 * 10*24); // 100,000,000 - 10%
     }
 
     /**
-     * @dev Set mainwallet
+     * @dev Set mainPool
      * require owner
      */
-    function setMainwallet(address addr) external onlyOwner {
-        if (mainwallet != address(0) && balanceOf(mainwallet) > 0) {
-            ERC20._transfer(mainwallet, addr, balanceOf(mainwallet));
+    function setMainPool(address addr) external onlyOwner {
+        if (mainPool != address(0) && balanceOf(mainPool) > 0) {
+            ERC20._transfer(mainPool, addr, balanceOf(mainPool));
         }
-        mainwallet = addr;
+        mainPool = addr;
     }
 
     /**
-     * @dev Set devwallet
+     * @dev Set devPool
      * require owner
      */
-    function setDevwallet(address addr) external onlyOwner {
-        if (devwallet != address(0) && balanceOf(devwallet) > 0) {
-            ERC20._transfer(devwallet, addr, balanceOf(devwallet));
+    function setDevPool(address addr) external onlyOwner {
+        if (devPool != address(0) && balanceOf(devPool) > 0) {
+            ERC20._transfer(devPool, addr, balanceOf(devPool));
         }
-        devwallet = addr;
+        devPool = addr;
     }
 
     /**
-     * @dev Set partnerwallet
+     * @dev Set partnerPool
      * require owner
      */
-    function setPartnerwallet(address addr) external onlyOwner {
-        if (partnerwallet != address(0) && balanceOf(partnerwallet) > 0) {
-            ERC20._transfer(partnerwallet, addr, balanceOf(partnerwallet));
+    function setPartnerPool(address addr) external onlyOwner {
+        if (partnerPool != address(0) && balanceOf(partnerPool) > 0) {
+            ERC20._transfer(partnerPool, addr, balanceOf(partnerPool));
         }
-        partnerwallet = addr;
+        partnerPool = addr;
     }
 
     /**
-     * @dev Set miningwallet
+     * @dev Set miningPool
      * require owner
      */
-    function setMiningwallet(address addr) external onlyOwner {
-        if (miningwallet != address(0) && balanceOf(miningwallet) > 0) {
-            ERC20._transfer(miningwallet, addr, balanceOf(miningwallet));
+    function setMiningPool(address addr) external onlyOwner {
+        if (miningPool != address(0) && balanceOf(miningPool) > 0) {
+            ERC20._transfer(miningPool, addr, balanceOf(miningPool));
         }
-        miningwallet = addr;
+        miningPool = addr;
     }
 
     /**
-     * @dev Set marketingwallet
+     * @dev Set marketingPool
      * require owner
      */
-    function setMarketingwallet(address addr) external onlyOwner {
-        if (marketingwallet != address(0) && balanceOf(marketingwallet) > 0) {
-            ERC20._transfer(marketingwallet, addr, balanceOf(marketingwallet));
+    function setMarketingPool(address addr) external onlyOwner {
+        if (marketingPool != address(0) && balanceOf(marketingPool) > 0) {
+            ERC20._transfer(marketingPool, addr, balanceOf(marketingPool));
         }
-        marketingwallet = addr;
+        marketingPool = addr;
     }
 }
