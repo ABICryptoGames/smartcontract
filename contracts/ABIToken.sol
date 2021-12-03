@@ -13,7 +13,7 @@ contract ABIToken is Ownable, ERC20 {
     using SafeERC20 for IERC20;
 
     address public mainPool; // keep not distribute token
-    address public devPool; // keep token use for game play
+    address public playPool; // keep token use for game play
     address public partnerPool; // keep token will distribute for partner
     address public miningPool; // keep token use for staking, framing
     address public marketingPool; // keep token for maketing and comunity
@@ -31,13 +31,13 @@ contract ABIToken is Ownable, ERC20 {
         // todo: change to product address
 
         mainPool = msg.sender;
-        ERC20._mint(mainPool, 270 * 10**24); // 270,000,000 - 27%
+        ERC20._mint(mainPool, 415 * 10**24); // 415,000,000 - 41.5%
 
-        devPool = msg.sender;
-        ERC20._mint(devPool, 210 * 10**24); // 210,000,000 - 21%
+        playPool = msg.sender;
+        ERC20._mint(playPool, 210 * 10**24); // 210,000,000 - 21%
 
         partnerPool = msg.sender;
-        ERC20._mint(partnerPool, 220 * 10**24); // 220,000,000 - 22%
+        ERC20._mint(partnerPool, 75 * 10**24); // 75,000,000 - 7.5%
 
         miningPool = msg.sender;
         ERC20._mint(miningPool, 200 * 10**24); // 200,000,000 - 20%
@@ -58,14 +58,11 @@ contract ABIToken is Ownable, ERC20 {
     }
 
     /**
-     * @dev Set devPool
+     * @dev Set playPool
      * require owner
      */
-    function setDevPool(address addr) external onlyOwner {
-        if (devPool != address(0) && balanceOf(devPool) > 0) {
-            ERC20._transfer(devPool, addr, balanceOf(devPool));
-        }
-        devPool = addr;
+    function setPlayPool(address addr) external onlyOwner {
+        playPool = addr;
     }
 
     /**
@@ -73,9 +70,6 @@ contract ABIToken is Ownable, ERC20 {
      * require owner
      */
     function setPartnerPool(address addr) external onlyOwner {
-        if (partnerPool != address(0) && balanceOf(partnerPool) > 0) {
-            ERC20._transfer(partnerPool, addr, balanceOf(partnerPool));
-        }
         partnerPool = addr;
     }
 
@@ -84,9 +78,6 @@ contract ABIToken is Ownable, ERC20 {
      * require owner
      */
     function setMiningPool(address addr) external onlyOwner {
-        if (miningPool != address(0) && balanceOf(miningPool) > 0) {
-            ERC20._transfer(miningPool, addr, balanceOf(miningPool));
-        }
         miningPool = addr;
     }
 
@@ -95,9 +86,6 @@ contract ABIToken is Ownable, ERC20 {
      * require owner
      */
     function setMarketingPool(address addr) external onlyOwner {
-        if (marketingPool != address(0) && balanceOf(marketingPool) > 0) {
-            ERC20._transfer(marketingPool, addr, balanceOf(marketingPool));
-        }
         marketingPool = addr;
     }
 }
