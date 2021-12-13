@@ -3,13 +3,11 @@
 pragma solidity ^0.8.0;
 
 import "./access/Ownable.sol";
-import "./utils/math/SafeMath.sol";
 import "./token/ERC1155/extensions/ERC1155Supply.sol";
 import "./utils/Strings.sol";
 
 
 contract BoxToken is Ownable, ERC1155Supply {
-    using SafeMath for uint256;
     using Strings for uint256;
 
     string private _baseURI;

@@ -3,15 +3,10 @@
 pragma solidity ^0.8.0;
 
 import "./access/Ownable.sol";
-import "./utils/math/SafeMath.sol";
 import "./token/ERC20/ERC20.sol";
-import "./token/ERC20/utils/SafeERC20.sol";
 
 
 contract ABIToken is Ownable, ERC20 {
-    using SafeMath for uint256;
-    using SafeERC20 for IERC20;
-
     address public mainPool; // keep not distribute token
     address public playPool; // keep token use for game play
     address public partnerPool; // keep token will distribute for partner

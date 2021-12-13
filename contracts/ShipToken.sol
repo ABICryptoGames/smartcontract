@@ -50,7 +50,7 @@ contract ShipToken is Ownable, ERC721Enumerable {
     /**
      * @dev get uri of `tokenId`
      */
-    function tokenURI(uint256 tokenId) external view override returns (string memory) {
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
         require(ERC721._exists(tokenId), "URI query for nonexistent token");
 
         string memory baseURI = _baseURI();
@@ -60,14 +60,14 @@ contract ShipToken is Ownable, ERC721Enumerable {
     /**
      * @dev get allTokenOf sender
      */
-    function allTokenOf() external view returns (uint256[] memory) {
+    function allTokenOf() public view returns (uint256[] memory) {
         return allTokenOf(msg.sender);
     }
 
     /**
      * @dev get list token owned by address
      */
-    function allTokenOf(address addr) external view returns (uint256[] memory) {
+    function allTokenOf(address addr) public view returns (uint256[] memory) {
         uint256 numOfTokens = balanceOf(addr);
         uint256[] memory tokens = new uint256[](numOfTokens);
 

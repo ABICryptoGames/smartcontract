@@ -3,14 +3,10 @@
 pragma solidity ^0.8.0;
 
 import "./access/Ownable.sol";
-import "./utils/math/SafeMath.sol";
 import "./token/ERC20/ERC20.sol";
-import "./token/ERC20/utils/SafeERC20.sol";
+
 
 contract GARToken is Ownable, ERC20 {
-    using SafeMath for uint256;
-    using SafeERC20 for IERC20;
-
     /**
      * @dev Sets the values for {name} and {symbol}.
      *
@@ -44,7 +40,7 @@ contract GARToken is Ownable, ERC20 {
     function burnFrom(address account, uint256 amount) external {
         require(account != address(0), "burn from 0");
 
-        _approve(account, msg.sender, allowance(account, msg.sender).sub(amount));
+        _approve(account, msg.sender, allowance(account, msg.sender) - amount);
         _burn(account, amount);
     }
 }
