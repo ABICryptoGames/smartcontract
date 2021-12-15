@@ -38,7 +38,7 @@ contract ABIToken is Ownable, ERC20 {
         ERC20._mint(miningPool, 200 * 10**24); // 200,000,000 - 20%
 
         marketingPool = msg.sender;
-        ERC20._mint(marketingPool, 100 * 10*24); // 100,000,000 - 10%
+        ERC20._mint(marketingPool, 100 * 10**24); // 100,000,000 - 10%
     }
 
     /**
