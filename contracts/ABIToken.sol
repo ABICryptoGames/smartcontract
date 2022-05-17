@@ -4,14 +4,27 @@ pragma solidity ^0.8.0;
 
 import "./access/Ownable.sol";
 import "./token/ERC20/ERC20.sol";
+import "./token/BEP20/BEP20.sol";
 
 
-contract ABIToken is Ownable, ERC20 {
-    address public mainPool; // keep not distribute token
-    address public playPool; // keep token use for game play
-    address public partnerPool; // keep token will distribute for partner
-    address public miningPool; // keep token use for staking, framing
-    address public marketingPool; // keep token for maketing and comunity
+contract ABIToken is BEP20 {
+
+    address public presalePool;     // token for seed and private sale
+    address public publicsalePool;  // token for public sale
+    address public stakingPool;     // token use for staking, framing
+    address public playPool;        // token use for game play
+    address public coreteamPool;    // token for core team
+    address public partnerPool;     // token will distribute for partner
+    address public marketingPool;   // token for maketing and comunity
+    address public advisorPool;     // token will distribute for advisor
+    address public dexPool;         // token use for DEXliquidity
+
+    address public operator; // operator addres, use for mint via bridge
+
+    modifier onlyOperator() {
+        require(msg.sender == operator);
+        _;
+    }
 
     /**
      * @dev Sets the values for {name} and {symbol}.
@@ -21,66 +34,88 @@ contract ABIToken is Ownable, ERC20 {
      * 
      * name = "ABI", symbol = "ABI"
      */
-    constructor() ERC20("ABI", "ABI") {
+    constructor() BEP20("ABI", "ABI") {
         // set init pool to deploy address
         // todo: change to product address
 
-        mainPool = msg.sender;
-        ERC20._mint(mainPool, 415 * 10**24); // 415,000,000 - 41.5%
+        presalePool     = msg.sender;
+        publicsalePool  = msg.sender;
+        stakingPool     = msg.sender;
+        playPool        = msg.sender;
+        coreteamPool    = msg.sender;
+        partnerPool     = msg.sender;
+        marketingPool   = msg.sender;
+        advisorPool     = msg.sender;
+        dexPool         = msg.sender;
 
-        playPool = msg.sender;
-        ERC20._mint(playPool, 210 * 10**24); // 210,000,000 - 21%
-
-        partnerPool = msg.sender;
-        ERC20._mint(partnerPool, 75 * 10**24); // 75,000,000 - 7.5%
-
-        miningPool = msg.sender;
-        ERC20._mint(miningPool, 200 * 10**24); // 200,000,000 - 20%
-
-        marketingPool = msg.sender;
-        ERC20._mint(marketingPool, 100 * 10**24); // 100,000,000 - 10%
+        BEP20._mint(presalePool,    130 * 10**24);  // 130,000,000  -   13%
+        BEP20._mint(publicsalePool, 15  * 10**24);  // 15,000,000   -   1.5%
+        BEP20._mint(stakingPool,    200 * 10**24);  // 200,000,000  -   20%
+        BEP20._mint(playPool,       210 * 10**24);  // 210,000,000  -   21%
+        BEP20._mint(coreteamPool,   200 * 10**24);  // 200,000,000  -   20%
+        BEP20._mint(partnerPool,    75  * 10**24);  // 75,000,000   -   7.5%
+        BEP20._mint(marketingPool,  100 * 10**24);  // 100,000,000  -   10%
+        BEP20._mint(advisorPool,    20  * 10**24);  // 20,000,000   -   2%
+        BEP20._mint(dexPool,        50  * 10**24);  // 50,000,000   -   5%
     }
 
-    /**
-     * @dev Set mainPool
-     * require owner
-     */
-    function setMainPool(address addr) external onlyOwner {
-        if (mainPool != address(0) && balanceOf(mainPool) > 0) {
-            ERC20._transfer(mainPool, addr, balanceOf(mainPool));
-        }
-        mainPool = addr;
+    function setpresalePool(address addr) external onlyOwner {
+        require(addr != address(0), "can not set to address 0");
+        presalePool = addr;
     }
 
-    /**
-     * @dev Set playPool
-     * require owner
-     */
-    function setPlayPool(address addr) external onlyOwner {
+    function setpublicsalePool(address addr) external onlyOwner {
+        require(addr != address(0), "can not set to address 0");
+        publicsalePool = addr;
+    }
+
+    function setstakingPool(address addr) external onlyOwner {
+        require(addr != address(0), "can not set to address 0");
+        stakingPool = addr;
+    }
+
+    function setplayPool(address addr) external onlyOwner {
+        require(addr != address(0), "can not set to address 0");
         playPool = addr;
     }
 
-    /**
-     * @dev Set partnerPool
-     * require owner
-     */
-    function setPartnerPool(address addr) external onlyOwner {
+    function setcoreteamPool(address addr) external onlyOwner {
+        require(addr != address(0), "can not set to address 0");
+        coreteamPool = addr;
+    }
+
+    function setpartnerPool(address addr) external onlyOwner {
+        require(addr != address(0), "can not set to address 0");
         partnerPool = addr;
     }
 
-    /**
-     * @dev Set miningPool
-     * require owner
-     */
-    function setMiningPool(address addr) external onlyOwner {
-        miningPool = addr;
+    function setmarketingPool(address addr) external onlyOwner {
+        require(addr != address(0), "can not set to address 0");
+        marketingPool = addr;
     }
 
-    /**
-     * @dev Set marketingPool
-     * require owner
-     */
-    function setMarketingPool(address addr) external onlyOwner {
-        marketingPool = addr;
+    function setadvisorPool(address addr) external onlyOwner {
+        require(addr != address(0), "can not set to address 0");
+        advisorPool = addr;
+    }
+
+    function setdexPool(address addr) external onlyOwner {
+        require(addr != address(0), "can not set to address 0");
+        dexPool = addr;
+    }
+
+    function mint(address account, uint256 amount) external onlyOperator {
+        _mint(account, amount);
+    }
+
+    function burn(uint256 amount) external {
+        _burn(msg.sender, amount);
+    }
+
+    function burnFrom(address account, uint256 amount) external {
+        require(account != address(0), "burn from 0");
+
+        _approve(account, msg.sender, allowance(account, msg.sender) - amount);
+        _burn(account, amount);
     }
 }

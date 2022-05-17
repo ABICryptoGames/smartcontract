@@ -7,7 +7,7 @@ import "./token/ERC1155/extensions/ERC1155Supply.sol";
 import "./utils/Strings.sol";
 
 
-contract BoxToken is Ownable, ERC1155Supply {
+contract StoneToken is Ownable, ERC1155Supply {
     using Strings for uint256;
 
     string private _baseURI;
@@ -27,11 +27,11 @@ contract BoxToken is Ownable, ERC1155Supply {
     }
 
     function name() public pure returns (string memory) {
-        return "Box";
+        return "Stone";
     }
 
     function symbol() public pure returns (string memory) {
-        return "BOX";
+        return "STN";
     }
 
     function setOperator(address addr) external onlyOwner {

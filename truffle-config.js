@@ -18,6 +18,12 @@
  *
  */
 
+ const HDWalletProvider = require('truffle-hdwallet-provider');
+
+ const fs = require('fs');
+ const mnemonic = fs.readFileSync(".secret").toString().trim();
+ const BSCSCANAPIKEY = '';
+ 
  module.exports = {
    /**
     * Networks define how you connect to your ethereum client and let you set the
@@ -28,6 +34,14 @@
     *
     * $ truffle test --network <network-name>
     */
+    plugins: [
+      'truffle-plugin-verify',
+      'truffle-contract-size'
+    ],
+    api_keys: {
+      bscscan: BSCSCANAPIKEY
+    },
+ 
    networks: {
      // Useful for testing. The `development` name is special - truffle uses it by default
      // if it's defined here and no other network is specified at the command line.
@@ -35,6 +49,13 @@
      // tab if you use this network and you must also set the `host`, `port` and `network_id`
      // options below to some value.
      //
+     develop: {
+      port: 8545,
+      network_id: 1399,
+      accounts: 5,
+      defaultEtherBalance: 500,
+      blockTime: 0
+     },
      development: {
       host: "127.0.0.1",     // Localhost (default: none)
       port: 8545,            // Standard Ethereum port (default: none)
@@ -65,6 +86,27 @@
      // network_id: 2111,   // This network is yours, in the cloud.
      // production: true    // Treats this network as if it was a public net. (default: false)
      // }
+     local: {
+      provider: () => new HDWalletProvider(mnemonic, `http://192.168.1.140:8545`),
+      network_id: "*",
+      // confirmations: 10,
+      timeoutBlocks: 200,
+      skipDryRun: true
+     },
+     testnet: {
+       provider: () => new HDWalletProvider(mnemonic, `https://data-seed-prebsc-2-s3.binance.org:8545`),
+       network_id: 97,
+       confirmations: 5,
+       timeoutBlocks: 200,
+       skipDryRun: true
+     },
+     bsc: {
+       provider: () => new HDWalletProvider(mnemonic, `https://bsc-dataseed1.binance.org`),
+       network_id: 56,
+       confirmations: 10,
+       timeoutBlocks: 200,
+       skipDryRun: true
+     },
    },
  
    // Set default mocha options here, use special reporters etc.
@@ -109,4 +151,3 @@
      // }
    // }
  };
- 

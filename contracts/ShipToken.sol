@@ -3,15 +3,16 @@
 pragma solidity ^0.8.0;
 
 import "./access/Ownable.sol";
+import "./token/ERC721/IERC721.sol";
 import "./token/ERC721/extensions/ERC721Enumerable.sol";
 import "./utils/Strings.sol";
 
 
-contract ShipToken is Ownable, ERC721Enumerable {
+contract ShipToken is Ownable, IERC721, ERC721Enumerable {
     using Strings for uint256;
 
     string public _baseTokenURI; // base url for gen token uri
-    address public _operator; // operator for controlling game logic
+    mapping(address => bool) public operators; // operator for mint and transfer
 
     constructor() ERC721("ShipToken", "GARS") {
         // init base uri
@@ -19,16 +20,16 @@ contract ShipToken is Ownable, ERC721Enumerable {
         _baseTokenURI = "";
 
         // todo: change to product operator
-        _operator = msg.sender;
+        operators[msg.sender] = true;
     }
 
     modifier onlyOperator {
-        require(msg.sender == _operator, "ShipToken: Caller is not operator");
+        require(operators[msg.sender], "ShipToken: Caller is not operator");
         _;
     }
 
-    function setOperator(address addr) external onlyOwner {
-        _operator = addr;
+    function setOperator(address addr, bool isOperator) external onlyOwner {
+        operators[addr] = isOperator;
     }
 
     function setBaseURI(string memory uri) external onlyOwner {
@@ -40,11 +41,61 @@ contract ShipToken is Ownable, ERC721Enumerable {
     }
 
     /**
+     * @dev See {IERC721-transferFrom}.
+     * only operator can do transfer.
+     */
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public override(IERC721, ERC721) onlyOperator {
+        require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: transfer caller is not owner nor approved");
+
+        _transfer(from, to, tokenId);
+    }
+
+    /**
+     * @dev See {IERC721-safeTransferFrom}.
+     */
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public override(IERC721, ERC721) onlyOperator {
+        safeTransferFrom(from, to, tokenId, "");
+    }
+
+    /**
+     * @dev See {IERC721-safeTransferFrom}.
+     */
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId,
+        bytes memory _data
+    ) public override(IERC721, ERC721) onlyOperator {
+        require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: transfer caller is not owner nor approved");
+        _safeTransfer(from, to, tokenId, _data);
+    }
+
+    /**
      * @dev mint `tokenId` to address
      * require operator
      */
     function mint(address to, uint256 _tokenId) external onlyOperator {
         _mint(to, _tokenId);
+    }
+
+    function burn(uint256 tokenId) external {
+        address owner = ERC721.ownerOf(tokenId);
+        require(
+            msg.sender == owner
+                || msg.sender == ERC721.getApproved(tokenId)
+                || ERC721.isApprovedForAll(owner, msg.sender),
+            "ShipToken: Require owner or approval of token"
+        );
+
+        _burn(tokenId);
     }
 
     /**

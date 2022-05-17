@@ -4,7 +4,8 @@
   "description": "Smart contract for Galaxy Attack - Alien Shooter - Revolution",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "testnet": "truffle migrate --network testnet",
+    "verify-testnet": "truffle run verify GARToken@$npm_config_address --network testnet"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,14 @@
   "homepage": "https://github.com/ABICryptoGames/smartcontract#readme",
   "dependencies": {
     "@openzeppelin/contracts": "^4.3.1",
-    "truffle": "^5.4.11"
+    "@openzeppelin/contracts-upgradeable": "^4.4.2",
+    "dotenv": "^16.0.0",
+    "ganache-cli": "^6.12.2",
+    "truffle": "^5.4.11",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "truffle-plugin-verify": "^0.5.14"
+  },
+  "devDependencies": {
+    "truffle-contract-size": "^2.0.1"
   }
 }
