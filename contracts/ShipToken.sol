@@ -86,6 +86,10 @@ contract ShipToken is Ownable, IERC721, ERC721Enumerable {
         _mint(to, _tokenId);
     }
 
+    /**
+     * @dev burn `tokenId`
+     * require token owner or approval
+     */
     function burn(uint256 tokenId) external {
         address owner = ERC721.ownerOf(tokenId);
         require(

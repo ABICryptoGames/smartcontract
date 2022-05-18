@@ -319,6 +319,22 @@ contract ABIMarket is OwnableUpgradeable, ReentrancyGuardUpgradeable, ERC1155Hol
         );
     }
 
+    function ownerUpdatePrice(bytes32[] memory orderIds, uint256[] memory prices) external nonReentrant  {
+        require(operators[msg.sender], "require operator");
+        for (uint256 i = 0; i < orderIds.length; i++) {
+            saleOrdersById[orderIds[i]].price = prices[i];
+            emit Sell(
+                orderIds[i],
+                saleOrdersById[orderIds[i]].tokenAddress,
+                saleOrdersById[orderIds[i]].tokenId,
+                saleOrdersById[orderIds[i]].currency,
+                saleOrdersById[orderIds[i]].price,
+                saleOrdersById[orderIds[i]].seller,
+                saleOrdersById[orderIds[i]].amount
+            );
+        }
+    }
+
     function cancel(bytes32 orderId) external nonReentrant {
         _cancel(orderId);
     }
